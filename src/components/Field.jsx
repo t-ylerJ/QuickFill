@@ -23,7 +23,7 @@ const Field = ({ label, value, onChange, multiline=false }) => {
           value={value}
           readOnly={!isEditable}
           onChange={(e) => onChange(e.target.value)}
-          className="w-1/2 flex-col h-40 border rounded-lg"
+          className="w-1/2 flex-col h-10 border rounded-lg"
         />
     }
       <PiCopyLight
