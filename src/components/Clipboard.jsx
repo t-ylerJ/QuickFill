@@ -1,13 +1,14 @@
 import '../App.css'
 import { useState, useEffect } from 'react';
 import { PiCopyLight } from "react-icons/pi";
+import Field from './Field';
 
 const Clipboard = () => {
   const [fullName, setFullName] = useState('');
   const [first, setFirst] = useState('');
   const [last, setLast] = useState('');
   const [address, setAddress] = useState('1234 Address Street');
-  const [textToCopy, setTextToCopy] = useState('defaultText');
+  const [jobDescription1, setJobDescription1] = useState("Performed Duty 1\n Performed Duty 2");
   const [isEditable, setIsEditable] = useState(false);
 
   const handleCopy = (textToCopy) => {
@@ -22,24 +23,10 @@ const Clipboard = () => {
   //  edit button becomes save button
   //
   return (
-    <>
-      <div className="flex">
-        <input
-          type="text"
-          value={address}
-          readOnly={!isEditable}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <PiCopyLight className="align-bottom mt-2 font-bold text-2xl" onClick={() => handleCopy(address)} />
-        <button
-          onClick={() => setIsEditable(!isEditable)}
-          className={`${isEditable ? "bg-green-500 text-white" : "bg-yellow-400 text-black"
-            } px-2 ml-4`}
-        >
-          {isEditable ? "Save" : "Edit"}
-        </button>
-      </div>
-    </>
+    <div className="space-y-6 p-4">
+      <Field label="Address" value={address} onChange={setAddress} multiline />
+      <Field label="Job Description 1" value={jobDescription1} onChange={setJobDescription1} multiline/>
+    </div>
   );
 };
 
