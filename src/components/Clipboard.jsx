@@ -14,12 +14,7 @@ const Clipboard = () => {
     navigator.clipboard.writeText(textToCopy)
       .then(() => (console.log('copied text')));
   }
-  const handleEdit = () => {
-    setIsEditable(!isEditable);
-  }
-  const handleChange = (e) => {
-    setAddress(e.target.value)
-  }
+  
   //handle edit toggles ability to edit field
   //passed as onclick function via edit button
   // when in edit mode, readOnly is false
@@ -33,11 +28,11 @@ const Clipboard = () => {
           type="text"
           value={address}
           readOnly={!isEditable}
-          onChange={handleChange}
+          onChange={(e) => setAddress(e.target.value)}
         />
         <PiCopyLight className="align-bottom mt-2 font-bold text-2xl" onClick={() => handleCopy(address)} />
         <button
-          onClick={handleEdit}
+          onClick={() => setIsEditable(!isEditable)}
           className={`${isEditable ? "bg-green-500 text-white" : "bg-yellow-400 text-black"
             } px-2 ml-4`}
         >
