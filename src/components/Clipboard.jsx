@@ -2,34 +2,58 @@ import '../App.css'
 import { useState, useEffect } from 'react';
 import { PiCopyLight } from "react-icons/pi";
 import Field from './Field';
+import { useAppContext } from '../context/AppContext';
 
 const Clipboard = () => {
   const [fullName, setFullName] = useState('');
   const [first, setFirst] = useState('');
   const [last, setLast] = useState('');
-  const [address, setAddress] = useState('1234 Address Street');
-  const [jobDescription1, setJobDescription1] = useState("Performed Duty 1\n Performed Duty 2");
-  const [jobDescription2, setJobDescription2] = useState("Performed Duty 1\n Performed Duty 2");
-  const [jobDescription3, setJobDescription3] = useState("Performed Duty 1\n Performed Duty 2");
+  const { formData, setFormData } = useAppContext();
+  const [editStates, setEditStates] = useState({
+    address: false,
+    jobDescription1: false,
+    jobDescription2: false,
+    jobDescription3: false,
+    jobDescription4: false,
+    jobDescription5: false
+  })
+  //Load data from localStorage on mount
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("formData"));
+    if (savedData) {
+      setFormData(savedData);
+    }
+  }, []);
 
-
+  //Save data to localStorage when form changes
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
   const handleCopy = (textToCopy) => {
     navigator.clipboard.writeText(textToCopy)
-      .then(() => (console.log('copied text')));
+      .then(() => (console.log('Copied text:', textToCopy)));
+  }
+
+  const toggleEdit = (fieldKey) => {
+    setEditStates((prev) => ({...prev, [fieldKey]: !prev[fieldKey] }))
   }
   
-  //handle edit toggles ability to edit field
-  //passed as onclick function via edit button
-  // when in edit mode, readOnly is false
-  // input field can be edited
-  //  edit button becomes save button
-  //
+
   return (
     <div className="space-y-6 p-4">
-      <Field label="Address" value={address} onChange={setAddress}/>
-      <Field label="Job Description 1" value={jobDescription1} onChange={setJobDescription1} multiline/>
-      <Field label="Job Description 2" value={jobDescription2} onChange={setJobDescription2} multiline/>
-      <Field label="Job Description 3" value={jobDescription3} onChange={setJobDescription3} multiline/>
+      {Object.keys(editStates).map((key) => (
+        <Field
+          key={key}
+          handleCopy={handleCopy}
+          label={key.replace(/([A-Z])/g, ' $1')} // Format label
+          value={formData[key] || ""}
+          onChange={(newValue) => setFormData({ ...formData, [key]: newValue })}
+          isEditable={editStates[key]}
+          toggleEdit={() => toggleEdit(key)}
+          multiline={key.startsWith("jobDescription")}
+        />
+      ))}
+    
     </div>
   );
 };

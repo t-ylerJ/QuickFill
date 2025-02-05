@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { PiCopyLight } from "react-icons/pi";
 import '../App.css'
 
-const Field = ({ label, value, onChange, multiline=false }) => {
-  const [isEditable, setIsEditable] = useState(false);
+const Field = ({ handleCopy, label, value, onChange, isEditable, toggleEdit, multiline=false }) => {
+  
   return (
     <div className="flex items-center space-x-3 w-full">
       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -28,11 +28,11 @@ const Field = ({ label, value, onChange, multiline=false }) => {
     }
       <PiCopyLight
         className="align-bottom mt-2 font-bold text-2xl size-20"
-        onClick={() => handleCopy(text)}
+        onClick={() => handleCopy(value)}
       />
 
       <button
-        onClick={() => setIsEditable(!isEditable)}
+        onClick={toggleEdit}
         className={`${isEditable ? "bg-green-500 text-white" : "bg-yellow-400 text-black"
           } px-2 ml-4 h-1/4 align-center`}
       >
